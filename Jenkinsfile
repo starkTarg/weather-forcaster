@@ -4,6 +4,10 @@ def AWS_SECRET_ACCESS_KEY=System.getenv('AWS_SECRET_ACCESS_KEY')
 
 node {
      stage ('Initialize') {
+     	echo "Python Version"
+     	sh "python --version"
+     	echo "pip Version"
+     	sh "pip --version"
      	def dockerHome = tool 'myDocker'
      	def mavenHome  = tool 'myMaven'
      	env.PATH = "${dockerHome}/bin:${mavenHome}/bin:${env.PATH}"
