@@ -1,3 +1,7 @@
+def CONTAINER_NAME="jenkins-pipeline"
+def CONTAINER_TAG="latest"
+def DOCKER_HUB_USER="startausif"
+def HTTP_PORT="8087"
 
 node {
      stage ('Initialize') {
@@ -9,15 +13,6 @@ node {
             	sh '''
                     echo "PATH = ${PATH}"
                     echo "M2_HOME = ${M2_HOME}"
-                    sudo apt-get install -y python python-pip
-					sudo pip install -U pip virtualenv
-
-					sudo su jenkins
-					cd ~/
-					virtualenv .venv
-					source .venv/bin/activate
-
-					pip install awscli
 
                 '''
             }
@@ -49,22 +44,28 @@ node {
 		
 	stage("Dockerise and Push") {
 			try {
-				echo "AWS version is"
-				//sh "aws configure --region envVars['AWS_REGION'] --access-key envVars['AWS_ACCESS_KEY_ID'] --secret-key envVars['AWS_SECRET_ACCESS_KEY']"
-				
-    			sh "aws --version"
-				//sh "eval \$(aws ecr get-login --no-include-email | sed 's|https://||')"
- 					script {
-						docker.build('weather-forcaster')
+						imageBuild(CONTAINER_NAME, CONTAINER_TAG)
 
-						docker.withRegistry('https://709325198486.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1:demo-aws-credentials') {
-    						docker.image('weather-forcaster').push('latest')
-    						echo "Pushed Image to ECR"
-    					}
- 					}
+    					withCredentials([usernamePassword(credentialsId: 'dockerHubAccount', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+            				pushToImage(CONTAINER_NAME, CONTAINER_TAG, USERNAME, PASSWORD)
+       				 	}
+ 					
 				} catch(error) {
             		echo "Exception occured while dockerising and pushing the image ${error}"	
             	}
 	}
  
 }
+
+def imageBuild(containerName, tag){
+    sh "docker build -t $containerName:$tag  -t $containerName --pull --no-cache ."
+    echo "Image build complete"
+}
+
+def pushToImage(containerName, tag, dockerUser, dockerPassword){
+    sh "docker login -u $dockerUser -p $dockerPassword"
+    sh "docker tag $containerName:$tag $dockerUser/$containerName:$tag"
+    sh "docker push $dockerUser/$containerName:$tag"
+    echo "Image push complete"
+}
+
