@@ -42,7 +42,6 @@ node {
 					sh "docker --version"
 					script {
 						docker.build('demo')
-						docker images
 						echo "AWS Version"
 						sh "aws --version"
 						sh "docker push 709325198486.dkr.ecr.us-east-1.amazonaws.com/demo:latest-1"
