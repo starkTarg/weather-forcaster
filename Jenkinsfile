@@ -46,7 +46,7 @@ node {
 	stage("Dockerise and Push") {
 			try {
 				echo "Logging into AWS ECR"
-				aws configure --region envVars['AWS_REGION'] --access-key envVars['AWS_ACCESS_KEY_ID'] --secret-key envVars['AWS_SECRET_ACCESS_KEY']
+				sh "aws configure --region envVars['AWS_REGION'] --access-key envVars['AWS_ACCESS_KEY_ID'] --secret-key envVars['AWS_SECRET_ACCESS_KEY']"
 				
     			echo "aws --version"
 				sh "eval \$(aws ecr get-login --no-include-email | sed 's|https://||')"
