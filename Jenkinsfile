@@ -38,8 +38,10 @@ node {
 	stage("Dockerise and Push") {
 			try {
 				echo "Logging into AWS ECR"
-				sh "aws --version"
-				sh("eval \$(aws ecr get-login --no-include-email | sed 's|https://||')")
+				withAWS(credentials:'demo-aws-credentials') {
+    				echo "aws --version"
+				}
+				sh "eval \$(aws ecr get-login --no-include-email | sed 's|https://||')"
  					script {
 						docker.build('weather-forcaster')
 
