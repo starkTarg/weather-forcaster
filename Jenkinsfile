@@ -42,14 +42,17 @@ node {
 					sh "docker --version"
 					script {
 						docker.build('demo')
+						docker images
 						docker.withRegistry('https://709325198486.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1:demo-aws-credentials') {
     						//docker.image('weather-forcaster').push('latest')
     						docker.image('demo').push('latest')
-    						//sh "docker push 709325198486.dkr.ecr.us-east-1.amazonaws.com/weather-forcaster:latest-1"
+    						echo "Pushed Image to ECR"
     					}
  					}
+ 					sh "docker push 709325198486.dkr.ecr.us-east-1.amazonaws.com/demo:latest-1"
+ 					echo "Pushed Image to ECR with tag latest-1"
 				} catch(error) {
-            		echo "Exception occured while testing app ${error}"	
+            		echo "Exception occured while dockerising and pushing the image ${error}"	
             	}
 	}
  
