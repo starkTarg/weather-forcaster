@@ -29,11 +29,13 @@ pipeline {
 		
 	stage("Dockerise and Push") {
 			steps {
-					sh "mvn package dockerfile:build"
-					sh "docker tag wf/weather-forcaster:latest 709325198486.dkr.ecr.us-east-1.amazonaws.com/weather-forcaster:latest"
+					//sh "mvn package dockerfile:build"
+					//sh "docker tag wf/weather-forcaster:latest 709325198486.dkr.ecr.us-east-1.amazonaws.com/weather-forcaster:latest"
+					docker.build('demo')
 					docker.withRegistry('https://709325198486.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1:demo-aws-credentials') {
-    					//docker.image('demo').push('latest')
-    					sh "docker push 709325198486.dkr.ecr.us-east-1.amazonaws.com/weather-forcaster:latest-1"
+    					//docker.image('weather-forcaster').push('latest')
+    					docker.image('demo').push('latest')
+    					//sh "docker push 709325198486.dkr.ecr.us-east-1.amazonaws.com/weather-forcaster:latest-1"
  				}
 			}
 	}
