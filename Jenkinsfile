@@ -37,23 +37,11 @@ node {
 		
 	stage("Dockerise and Push") {
 			try {
-					//sh "mvn package dockerfile:build"
-					//sh "docker tag wf/weather-forcaster:latest 709325198486.dkr.ecr.us-east-1.amazonaws.com/weather-forcaster:latest"
+					sh "mvn package dockerfile:build"
+					sh "docker tag wf/weather-forcaster:latest 709325198486.dkr.ecr.us-east-1.amazonaws.com/weather-forcaster:latest"
 					sh "docker --version"
-					script {
-						docker.build('demo')
-						echo "AWS Version"
-						sh "aws --version"
-						sh "docker push 709325198486.dkr.ecr.us-east-1.amazonaws.com/demo:latest-1"
- 						echo "Pushed Image to ECR with tag latest-1"
-
-						docker.withRegistry('https://709325198486.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1:demo-aws-credentials') {
-    						//docker.image('weather-forcaster').push('latest')
-    						docker.image('demo').push('latest')
-    						echo "Pushed Image to ECR"
-    					}
- 					}
- 					sh "docker push 709325198486.dkr.ecr.us-east-1.amazonaws.com/demo:latest-1"
+					sh "docker push 709325198486.dkr.ecr.us-east-1.amazonaws.com/demo:latest"
+					
  					echo "Pushed Image to ECR with tag latest-1"
 				} catch(error) {
             		echo "Exception occured while dockerising and pushing the image ${error}"	
