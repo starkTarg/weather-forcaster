@@ -1,6 +1,4 @@
-pipeline {
- agent any
- stages {
+node {
      stage ('Initialize') {
      	def dockerHome = tool 'myDocker'
      	def mavenHome  = tool 'myMaven'
@@ -43,5 +41,5 @@ pipeline {
  					}
 				}
 	}
- }
+ 
 }
