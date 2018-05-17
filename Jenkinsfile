@@ -44,7 +44,7 @@ node {
 						docker.build('demo')
 						docker images
 						echo "AWS Version"
-						aws --version
+						sh "aws --version"
 						sh "docker push 709325198486.dkr.ecr.us-east-1.amazonaws.com/demo:latest-1"
  						echo "Pushed Image to ECR with tag latest-1"
 
