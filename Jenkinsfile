@@ -40,7 +40,7 @@ node {
 					sh "mvn package dockerfile:build"
 					sh "docker tag wf/weather-forcaster:latest 709325198486.dkr.ecr.us-east-1.amazonaws.com/weather-forcaster:latest"
 					sh "docker --version"
-					sh "docker push 709325198486.dkr.ecr.us-east-1.amazonaws.com/demo:latest"
+					sh "docker push 709325198486.dkr.ecr.us-east-1.amazonaws.com/weather-forcaster:latest"
 					
  					echo "Pushed Image to ECR with tag latest-1"
 				} catch(error) {
