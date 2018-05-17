@@ -1,11 +1,9 @@
 pipeline {
- agent { docker 'alpine' }
- tools {
-        maven 'Maven 3.5.0'
-        docker 'myDocker'
-    }
+ agent any
  stages {
      stage ('Initialize') {
+     	def dockerHome = tool 'myDocker'
+     	def mavenHome  = tool 'myMaven'
             steps {
                 sh '''
                     echo "PATH = ${PATH}"
