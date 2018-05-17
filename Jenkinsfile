@@ -1,6 +1,6 @@
-def AWS_REGION=env.AWS_REGION
-def AWS_ACCESS_KEY_ID=env.AWS_ACCESS_KEY_ID
-def AWS_SECRET_ACCESS_KEY=env.AWS_SECRET_ACCESS_KEY
+def AWS_REGION=System.getenv('AWS_REGION')
+def AWS_ACCESS_KEY_ID=System.getenv('AWS_ACCESS_KEY_ID')
+def AWS_SECRET_ACCESS_KEY=System.getenv('AWS_SECRET_ACCESS_KEY')
 
 node {
      stage ('Initialize') {
@@ -11,6 +11,7 @@ node {
             	sh '''
                     echo "PATH = ${PATH}"
                     echo "M2_HOME = ${M2_HOME}"
+                    echo "AWS_REGION = ${AWS_REGION}"
                 '''
             }
             catch(error) {
@@ -41,8 +42,9 @@ node {
 		
 	stage("Dockerise and Push") {
 			try {
-				aws configure --region $AWS_REGION --access-key $AWS_ACCESS_KEY_ID --secret-key $AWS_SECRET_ACCESS_KEY
 				echo "Logging into AWS ECR"
+				aws configure --region $AWS_REGION --access-key $AWS_ACCESS_KEY_ID --secret-key $AWS_SECRET_ACCESS_KEY
+				
     			echo "aws --version"
 				sh "eval \$(aws ecr get-login --no-include-email | sed 's|https://||')"
  					script {
