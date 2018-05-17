@@ -1,5 +1,5 @@
 pipeline {
- agent any
+ agent { docker 'alpine' }
  tools {
         maven 'Maven 3.5.0'
     }
@@ -32,6 +32,7 @@ pipeline {
 			steps {
 					//sh "mvn package dockerfile:build"
 					//sh "docker tag wf/weather-forcaster:latest 709325198486.dkr.ecr.us-east-1.amazonaws.com/weather-forcaster:latest"
+					sh "docker --version"
 					script {
 						docker.build('demo')
 						docker.withRegistry('https://709325198486.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1:demo-aws-credentials') {
