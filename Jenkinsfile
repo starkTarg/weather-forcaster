@@ -2,6 +2,7 @@ pipeline {
  agent { docker 'alpine' }
  tools {
         maven 'Maven 3.5.0'
+        docker 'myDocker'
     }
  stages {
      stage ('Initialize') {
@@ -9,6 +10,7 @@ pipeline {
                 sh '''
                     echo "PATH = ${PATH}"
                     echo "M2_HOME = ${M2_HOME}"
+                    env.PATH = "${dockerHome}/bin:${mavenHome}/bin:${env.PATH}"
                 '''
             }
         }
