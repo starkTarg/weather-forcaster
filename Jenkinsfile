@@ -1,12 +1,7 @@
-def envVars = Jenkins.instance.getGlobalNodeProperties()[0].getEnvVars() 
-print envVars['myVar']
 
 node {
      stage ('Initialize') {
-     	echo "Python Version"
-     	sh "python --version"
-     	echo "pip Version"
-     	sh "pip --version"
+
      	def dockerHome = tool 'myDocker'
      	def mavenHome  = tool 'myMaven'
      	env.PATH = "${dockerHome}/bin:${mavenHome}/bin:${env.PATH}"
@@ -14,7 +9,16 @@ node {
             	sh '''
                     echo "PATH = ${PATH}"
                     echo "M2_HOME = ${M2_HOME}"
-                    echo "envVars['myVar']"
+                    sudo apt-get install -y python python-pip
+					sudo pip install -U pip virtualenv
+
+					sudo su jenkins
+					cd ~/
+					virtualenv .venv
+					source .venv/bin/activate
+
+					pip install awscli
+
                 '''
             }
             catch(error) {
@@ -45,11 +49,11 @@ node {
 		
 	stage("Dockerise and Push") {
 			try {
-				echo "Logging into AWS ECR"
-				sh "aws configure --region envVars['AWS_REGION'] --access-key envVars['AWS_ACCESS_KEY_ID'] --secret-key envVars['AWS_SECRET_ACCESS_KEY']"
+				echo "AWS version is"
+				//sh "aws configure --region envVars['AWS_REGION'] --access-key envVars['AWS_ACCESS_KEY_ID'] --secret-key envVars['AWS_SECRET_ACCESS_KEY']"
 				
-    			echo "aws --version"
-				sh "eval \$(aws ecr get-login --no-include-email | sed 's|https://||')"
+    			sh "aws --version"
+				//sh "eval \$(aws ecr get-login --no-include-email | sed 's|https://||')"
  					script {
 						docker.build('weather-forcaster')
 
