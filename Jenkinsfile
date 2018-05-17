@@ -1,3 +1,7 @@
+def AWS_REGION=env.AWS_REGION
+def AWS_ACCESS_KEY_ID=env.AWS_ACCESS_KEY_ID
+def AWS_SECRET_ACCESS_KEY=env.AWS_SECRET_ACCESS_KEY
+
 node {
      stage ('Initialize') {
      	def dockerHome = tool 'myDocker'
@@ -37,10 +41,9 @@ node {
 		
 	stage("Dockerise and Push") {
 			try {
+				aws configure --region $AWS_REGION --access-key $AWS_ACCESS_KEY_ID --secret-key $AWS_SECRET_ACCESS_KEY
 				echo "Logging into AWS ECR"
-				withAWS(credentials:'demo-aws-credentials') {
-    				echo "aws --version"
-				}
+    			echo "aws --version"
 				sh "eval \$(aws ecr get-login --no-include-email | sed 's|https://||')"
  					script {
 						docker.build('weather-forcaster')
