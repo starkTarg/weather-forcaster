@@ -45,7 +45,7 @@ node {
 	stage("Dockerise and Push") {
 			try {
 						imageBuild(CONTAINER_NAME, CONTAINER_TAG)
-
+					
     					withCredentials([usernamePassword(credentialsId: 'dockerHubAccount', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
             				pushToImage(CONTAINER_NAME, CONTAINER_TAG, USERNAME, PASSWORD)
        				 	}
@@ -63,6 +63,7 @@ def imageBuild(containerName, tag){
 }
 
 def pushToImage(containerName, tag, dockerUser, dockerPassword){
+	echo "Docker User= ${dockerUser}"
     sh "docker login -u $dockerUser -p $dockerPassword"
     sh "docker tag $containerName:$tag $dockerUser/$containerName:$tag"
     sh "docker push $dockerUser/$containerName:$tag"
