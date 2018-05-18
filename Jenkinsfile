@@ -1,7 +1,7 @@
 def CONTAINER_NAME="jenkins-pipeline"
 def CONTAINER_TAG="latest"
 def DOCKER_HUB_USER="startausif"
-def HTTP_PORT="8087"
+def HTTP_PORT="8097"
 
 node {
      stage ('Initialize') {
