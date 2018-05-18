@@ -44,6 +44,8 @@ node {
 		
 	stage("Dockerise and Push") {
 			try {
+						echo "AWS version is ::: "
+						sh "aws --version"
 						imageBuild(CONTAINER_NAME, CONTAINER_TAG)
 					
     					withCredentials([usernamePassword(credentialsId: 'dockerHubAccount', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
