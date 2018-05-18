@@ -54,6 +54,15 @@ node {
             		echo "Exception occured while dockerising and pushing the image ${error}"	
             	}
 	}
+
+	stage("Run") {
+			try {
+					runApp(CONTAINER_NAME, CONTAINER_TAG, DOCKER_HUB_USER, HTTP_PORT)
+ 					
+				} catch(error) {
+            		echo "Exception occured while running the docker image ${error}"	
+            	}
+	}
  
 }
 
@@ -70,3 +79,8 @@ def pushToImage(containerName, tag, dockerUser, dockerPassword){
     echo "Image push complete"
 }
 
+def runApp(containerName, tag, dockerHubUser, httpPort){
+    sh "docker pull $dockerHubUser/$containerName"
+    sh "docker run -d --rm -p $httpPort:$httpPort --name $containerName $dockerHubUser/$containerName:$tag"
+    echo "Application started on port: ${httpPort} (http)"
+}

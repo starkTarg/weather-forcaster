@@ -1,0 +1,87 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Weather Forcaster
+  description: |
+    ## Welcome 
+  contact:
+    name: Tausif
+    url: https://developer.tausif.com/
+    email: tausif@dev.com
+  termsOfService: Please contact Tausif
+schemes:
+ - https
+ - http
+host: http://localhost:8097
+basePath: /weather
+tags:
+  - name: weather
+    description: API for weather forcast
+
+consumes:
+  - application/json
+produces:
+  - application/json
+parameters:
+  Authorization:
+    name: Authorization
+    in: header
+    type: string
+    required: true
+paths:
+  '/{coordinates}':
+    get:
+      summary: Forcast weather
+      description: returns weather summary for coordinate
+      tags:
+        - weather
+      parameters:
+        - $ref: '#/parameters/Authorization'
+        - name: coordinates
+          in: path
+          type: string
+          description: Comma separated coordinates
+          required: true
+      responses:
+        '200':
+          description: Forcast received
+          schema:
+            $ref: '#/definitions/WeatherResponse'
+        '400':
+          description: the request is malformed
+          schema:
+            $ref: '#/definitions/GenericError'
+  
+definitions:
+      
+
+  WeatherResponse:
+    required:
+        - latitude
+        - longitude
+        - timezone
+    properties:
+      latitude:
+        type: string
+        example: 23
+        description: Latitude
+      longitude:
+        type: string
+        example: -09
+        description: Longitude 
+      timezone:
+        type: string
+        example: America/New_York.
+  GenericError:
+    required:
+      - code
+      - message
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      details:
+        type: string
+      
